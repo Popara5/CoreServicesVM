@@ -1,0 +1,48 @@
+// Enable Network Watcher
+resource networkWatcher 'Microsoft.Network/networkWatchers@2021-03-01' = {
+  name: 'NetworkWatcher_eastus'
+  location: 'East US'
+}
+
+// Create Connection Monitor
+resource connectionMonitor 'Microsoft.Network/networkWatchers/connectionMonitors@2021-03-01' = {
+  name: 'VnetConnectionMonitor'
+  parent: networkWatcher
+  properties: {
+    endpoints: [
+      {
+        name: 'Endpoint1'
+        resourceId: vm1.id
+      }
+      {
+        name: 'Endpoint2'
+        resourceId: vm2.id
+      }
+    ]
+    testConfigurations: [
+      {
+        name: 'TestConfig'
+        testFrequencySec: 60
+        protocol: 'Tcp'
+        tcpConfiguration: {
+          port: 3389
+        }
+      }
+    ]
+  }
+}
+
+// Enable Flow Logs
+resource nsgFlowLog 'Microsoft.Network/networkWatchers/flowLogs@2021-03-01' = {
+  name: 'NetworkSecurityGroupFlowLog'
+  parent: networkWatcher
+  properties: {
+    targetResourceId: '<<Network Security Group Resource ID>>'
+    enabled: true
+    storageId: '<<Storage Account Resource ID>>'
+    retentionPolicy: {
+      days: 7
+      enabled: true
+    }
+  }
+}
