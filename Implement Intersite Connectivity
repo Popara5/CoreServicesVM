@@ -1,0 +1,9 @@
+resource vnetInfra 'Microsoft.Resources/deployments@2021-01-01' = {
+  name: 'VnetInfrastructure'
+  properties: {
+    mode: 'Incremental'
+    templateLink: {
+      uri: 'https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/quickstarts/microsoft.network/vnet-two-vnets/azuredeploy.json'
+    }
+  }
+}
