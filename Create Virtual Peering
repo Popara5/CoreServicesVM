@@ -1,0 +1,27 @@
+// Peering from CoreServicesVm to ManufacturingVm
+resource peering1 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2021-03-01' = {
+  name: '${vnet1.name}-to-${vnet2.name}'
+  parent: vnet1
+  properties: {
+    remoteVirtualNetwork: {
+      id: vnet2.id
+    }
+    allowVirtualNetworkAccess: true
+    allowForwardedTraffic: true
+    allowGatewayTransit: false
+  }
+}
+
+// Peering from ManufacturingVm to CoreServicesVm
+resource peering2 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2021-03-01' = {
+  name: '${vnet2.name}-to-${vnet1.name}'
+  parent: vnet2
+  properties: {
+    remoteVirtualNetwork: {
+      id: vnet1.id
+    }
+    allowVirtualNetworkAccess: true
+    allowForwardedTraffic: true
+    allowGatewayTransit: false
+  }
+}
